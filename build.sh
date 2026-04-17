@@ -1,14 +1,20 @@
 #!/bin/bash
 
 APP_NAME="macpaper"
-BINARY_NAME="payloader"
+BINARY_NAME="macpaper"
 
 echo "[*] Cleaning up..."
 rm -rf "${APP_NAME}.app"
 rm -f "${BINARY_NAME}"
 
-echo "[*] Compiling dummy.swift..."
-swiftc dummy.swift -o "${BINARY_NAME}" -O
+echo "[*] Compiling dummy.swift for arm64..."
+swiftc dummy.swift -O -target arm64-apple-macosx12.0 -o "${BINARY_NAME}_arm64"
+echo "[*] Compiling dummy.swift for x86_64..."
+swiftc dummy.swift -O -target x86_64-apple-macosx12.0 -o "${BINARY_NAME}_x86_64"
+
+echo "[*] Creating Universal Binary..."
+lipo -create -output "${BINARY_NAME}" "${BINARY_NAME}_arm64" "${BINARY_NAME}_x86_64"
+rm "${BINARY_NAME}_arm64" "${BINARY_NAME}_x86_64"
 
 if [ $? -ne 0 ]; then
     echo "[!] Compilation failed."

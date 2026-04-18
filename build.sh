@@ -30,7 +30,8 @@ mv "${BINARY_NAME}" "${APP_NAME}.app/Contents/MacOS/${BINARY_NAME}"
 cp updater.sh "${APP_NAME}.app/Contents/Resources/"
 cp moonleaf.png "${APP_NAME}.app/Contents/Resources/"
 cp macpaper.icns "${APP_NAME}.app/Contents/Resources/"
-cp Comfortaa-*.ttf "${APP_NAME}.app/Contents/Resources/"
+cp CascadiaCode-*.ttf "${APP_NAME}.app/Contents/Resources/"
+cp NOTICE "${APP_NAME}.app/Contents/Resources/README"
 chmod +x "${APP_NAME}.app/Contents/Resources/updater.sh"
 
 

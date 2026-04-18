@@ -2,7 +2,7 @@ import SwiftUI
 import AppKit
 
 func registerFonts() {
-    let fontNames = ["Comfortaa-Regular.ttf", "Comfortaa-Bold.ttf", "Comfortaa-Light.ttf"]
+    let fontNames = ["CascadiaCode-VariableFont_wght.ttf", "CascadiaCode-Italic-VariableFont_wght.ttf"]
     for fontName in fontNames {
         if let fontURL = Bundle.main.url(forResource: fontName, withExtension: nil) {
             var error: Unmanaged<CFError>?
@@ -87,6 +87,12 @@ class TerminalManager: ObservableObject {
             }
         }
     }
+    
+    func openResourcesFolder() {
+        if let resourcePath = Bundle.main.resourcePath {
+            NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: resourcePath)
+        }
+    }
 }
 
 struct ContentView: View {
@@ -96,8 +102,87 @@ struct ContentView: View {
         ZStack {
             Color(red: 0.08, green: 0.08, blue: 0.09)
                 .ignoresSafeArea()
-            
             VStack(spacing: 0) {
+                HStack(spacing: 16) {
+                    Image(nsImage: NSImage(named: "moonleaf") ?? NSImage())
+                        .resizable()
+                        .renderingMode(.original)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 42, height: 42)
+                    
+                    Text("moonleaf")
+                        .font(.custom("Cascadia Code", size: 24))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white.opacity(0.8))
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 24)
+                .padding(.bottom, 16)
+                
+                Rectangle()
+                    .fill(Color.white.opacity(0.1))
+                    .frame(height: 1)
+                    .padding(.horizontal, 24)
+
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Please read below!")
+                        .font(.custom("Cascadia Code", size: 24))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                    
+                    VStack(alignment: .leading, spacing: 14) {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("'macpaper' has been updated to 'moonleaf'.\nDue to my stupidity, there is a hard-coded link in the previous Updater, making it uneffective for this change. This installer will download the latest version of moonleaf from https://github.com/naomisphere/moonleaf\n\nIf you wish to know more, check the README file ")
+                                .font(.custom("Cascadia Code", size: 13))
+                                .foregroundColor(.white.opacity(0.9))
+                                +
+                            Text("here")
+                                .font(.custom("Cascadia Code", size: 13))
+                                .foregroundColor(.blue.opacity(0.8))
+                                .underline()
+                                +
+                            Text(".")
+                                .font(.custom("Cascadia Code", size: 13))
+                                .foregroundColor(.white.opacity(0.9))
+                        }
+                        .lineSpacing(4)
+                        .onTapGesture {
+                            terminal.openResourcesFolder()
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("Your configuration and wallpapers will save, nothing will be lost.\nClick 'Continue' to execute the ")
+                                .font(.custom("Cascadia Code", size: 12))
+                                .foregroundColor(.white.opacity(0.6))
+                                +
+                            Text("installation script")
+                                .font(.custom("Cascadia Code", size: 12))
+                                .foregroundColor(.blue.opacity(0.8))
+                                .underline()
+                                +
+                            Text(" located in the Resources folder.")
+                                .font(.custom("Cascadia Code", size: 12))
+                                .foregroundColor(.white.opacity(0.6))
+                        }
+                        .onTapGesture {
+                            terminal.openResourcesFolder()
+                        }
+                        
+                        Link("View installer source on GitHub", destination: URL(string: "https://github.com/naomisphere/dummy-moonleaf-installer")!)
+                            .font(.custom("Cascadia Code", size: 11))
+                            .foregroundColor(.blue.opacity(0.8))
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(24)
+                
+                Rectangle()
+                    .fill(Color.white.opacity(0.1))
+                    .frame(height: 1)
+                    .padding(.horizontal, 24)
+
                 VStack(alignment: .leading, spacing: 0) {
                     HStack {
                         HStack(spacing: 8) {
@@ -105,11 +190,6 @@ struct ContentView: View {
                             Circle().fill(Color.white.opacity(0.1)).frame(width: 8, height: 8)
                             Circle().fill(Color.white.opacity(0.1)).frame(width: 8, height: 8)
                         }
-                        Spacer()
-                        Text("")
-                            .font(.custom("Comfortaa-Bold", size: 10))
-                            .foregroundColor(.white.opacity(0.3))
-                            .tracking(2)
                         Spacer()
                     }
                     .padding(.horizontal, 12)
@@ -119,13 +199,13 @@ struct ContentView: View {
                     ScrollViewReader { proxy in
                         ScrollView {
                             Text(terminal.output)
-                                .font(.system(.footnote, design: .monospaced)) 
+                                .font(.custom("Cascadia Code", size: 11))
                                 .foregroundColor(.white.opacity(0.7))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(14)
                                 .id("bottom")
                         }
-                        .frame(height: 160)
+                        .frame(height: 140)
                         .background(Color.black.opacity(0.3))
                         .onChange(of: terminal.output) { _ in
                             withAnimation {
@@ -134,86 +214,39 @@ struct ContentView: View {
                         }
                     }
                 }
-                .cornerRadius(10)
+                .cornerRadius(4)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: 4)
                         .stroke(Color.white.opacity(0.06), lineWidth: 1)
                 )
                 .padding(24)
 
-                Spacer()
-                
-                VStack(spacing: 28) {
-                    Image(nsImage: NSImage(named: "moonleaf") ?? NSImage())
-                        .resizable()
-                        .renderingMode(.original)
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 80, height: 80)
-                        .shadow(color: .green.opacity(0.1), radius: 30, x: 0, y: 0)
-                    
-                    VStack(spacing: 12) {
-                        Text("Please read below!")
-                            .font(.custom("Comfortaa-Bold", size: 30))
-                            .foregroundColor(.white)
-                        
-                        Rectangle()
-                            .fill(Color.blue.opacity(0.6))
-                            .frame(width: 40, height: 3)
-                            .cornerRadius(1.5)
-                    }
-                    
-                    VStack(spacing: 18) {
-                        Text("macpaper has been revamped into 'moonleaf'.\n\nThe old updater had the 'macpaper' link hard-coded into it, making the previous updater ineffective.\nThis installer will download the new files. Apologies, this won't be an issue ever again.")
-                            .font(.custom("Comfortaa-Regular", size: 16))
-                            .multilineTextAlignment(.center)
-                            .lineSpacing(4)
-                            .padding(.horizontal, 40)
-                            .foregroundColor(.white.opacity(0.8))
-                        
-                        Text("Clicking 'Continue' will execute the updater script located in:\n\(terminal.resourcePath)/updater.sh")
-                            .font(.custom("Comfortaa-Light", size: 14))
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 50)
-                            .foregroundColor(.white.opacity(0.5))
-                        
-                        Text("installer progress is visible in the console above.\nThe source for this dummy installer is available on GitHub.\nhttps://github.com/naomisphere/dummy-moonleaf-installer")
-                            .font(.custom("Comfortaa-Bold", size: 13))
-                            .foregroundColor(.green.opacity(0.7))
-                            .padding(.top, 4)
-                    }
-                }
-                
-                Spacer()
+                Spacer(minLength: 24)
 
                 Button(action: {
                     terminal.runScript()
                 }) {
                     Text(terminal.isRunning ? "Installing..." : "Continue")
-                        .font(.custom("Comfortaa-Bold", size: 15))
+                        .font(.custom("Cascadia Code", size: 14))
+                        .fontWeight(.semibold)
                         .foregroundColor(.white)
-                        .padding(.vertical, 16)
+                        .padding(.vertical, 14)
                         .padding(.horizontal, 80)
                         .background(
-                            ZStack {
-                                if terminal.isRunning {
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .fill(Color.white.opacity(0.08))
-                                } else {
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .fill(LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.7), Color.blue.opacity(0.5)]), startPoint: .top, endPoint: .bottom))
-                                }
-                                RoundedRectangle(cornerRadius: 15)
-                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                            }
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(terminal.isRunning ? Color.white.opacity(0.03) : Color.white.opacity(0.06))
                         )
-                        .shadow(color: Color.green.opacity(terminal.isRunning ? 0 : 0.15), radius: 20, x: 0, y: 8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        )
                 }
                 .buttonStyle(PlainButtonStyle())
                 .disabled(terminal.isRunning)
-                .padding(.bottom, 60)
+                .padding(.bottom, 32)
             }
         }
-        .frame(width: 600, height: 820)
+        .frame(width: 600, height: 680)
     }
 }
 
@@ -225,7 +258,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let contentView = ContentView()
         window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 600, height: 820),
+            contentRect: NSRect(x: 0, y: 0, width: 600, height: 680),
             styleMask: [.titled, .closable, .miniaturizable, .fullSizeContentView],
             backing: .buffered, defer: false)
         window.center()
@@ -247,4 +280,3 @@ let app = NSApplication.shared
 let delegate = AppDelegate()
 app.delegate = delegate
 app.run()
-

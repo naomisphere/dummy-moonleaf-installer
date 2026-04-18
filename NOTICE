@@ -1,0 +1,18 @@
+This app is not actually macpaper!
+Starting from version 3.0 and above, 'macpaper' is now moonleaf (MIT License)
+Versions pre-v3.0 (macpaper) are licensed under the GNU General Public License v3.0 (GPLv3). 
+
+Due to my stupidity, I hard-coded the macpaper repository link into the Updater, making it uneffective for this transition.
+The app in this disk image is a 'dummy' macpaper app, designed to trigger macpaper's dumb-coded updater.
+It will download the new files (namely the new app) from https://github.com/naomisphere/moonleaf
+
+This dummy installer's source code can be found at:
+https://github.com/naomisphere/dummy-moonleaf-installer
+
+Of course, you are free to install the app manually if you prefer to do so:
+https://github.com/naomisphere/moonleaf/releases/latest
+(direct) https://github.com/naomisphere/moonleaf/releases/latest/download/moonleaf.dmg
+
+Apologies. This won't be an issue ever again.
+
+- naomisphere
